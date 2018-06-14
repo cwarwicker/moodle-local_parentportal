@@ -46,7 +46,7 @@ class elbp_portal extends \ELBP\Plugins\Plugin {
                 "name" => strip_namespace(get_class($this)),
                 "title" => "Parent Portal",
                 "path" => '/local/parentportal/',
-                "version" => 2013111400
+                "version" => 2018061400
             ) );
         }
         else

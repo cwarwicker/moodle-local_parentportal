@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2018060900;
+$plugin->version  = 2018061400;
 $plugin->requires = 2016052300;
 $plugin->maturity = MATURITY_BETA;
 $plugin->component = 'local_parentportal';

@@ -68,7 +68,8 @@ class Portal {
         
         $this->loadAction();
                 
-        $this->dbversion = get_config('local_parentportal', 'parent_portal_version');
+        $this->dbversion = get_config('local_parentportal', 'version');
+        $this->installed = get_config('local_parentportal', 'installed');
         
         if ($this->isInstalled())
         {
@@ -90,7 +91,7 @@ class Portal {
     
     public function isInstalled(){
         
-        return ($this->dbversion !== false);
+        return ($this->installed == 1);
         
     }
     
@@ -99,6 +100,14 @@ class Portal {
         global $CFG, $DB;
      
         $dbman = $DB->get_manager();
+        
+        // Is the old /portal version installed? - If so, remove that old setting
+        $oldVersion = get_config('core', 'parent_portal_version');
+        if ($oldVersion){
+            unset_config('parent_portal_version', 'core');
+        }
+        
+        
         
         // Create tables
         
@@ -182,40 +191,45 @@ class Portal {
         }
         
         
-        
-        // Create admin user
-        $obj = new \stdClass();
-        $obj->firstname = "Admin";
-        $obj->lastname = "Account";
-        $obj->email = $admin->email;
-        $obj->passwordsalt = $this->generateRandomCode(10);
-        $obj->password = $this->buildPassword($admin->password, $obj->passwordsalt);
-        $obj->confirmationcode = "";
-        $obj->confirmed = 1;
-        $obj->isadmin = 1;
-        $DB->insert_record("portal_users", $obj);
-        
-        // Insert default settings
-        $settings = array();
-        $settings['welcome_email'] = "Welcome to the Parent Portal system!
-
-To confirm your account please visit the following URL:
-
-%confirm%
-
-If you have any problems please contact your Learning Technologies team";
-        
-        $settings['accessrequests_type'] = 'idnumber';
-        $settings['signup_code'] = '';
-        $settings['idnumber_field'] = 'username';
-        $settings['site_title'] = 'Parent Portal';
-
-        foreach($settings as $setting => $value)
+        // Create admin user and insert settings, if old version not already installed
+        if (!$oldVersion)
         {
+        
+            // Create admin user
             $obj = new \stdClass();
-            $obj->setting = $setting;
-            $obj->value = $value;
-            $DB->insert_record("portal_settings", $obj);
+            $obj->firstname = "Admin";
+            $obj->lastname = "Account";
+            $obj->email = $admin->email;
+            $obj->passwordsalt = $this->generateRandomCode(10);
+            $obj->password = $this->buildPassword($admin->password, $obj->passwordsalt);
+            $obj->confirmationcode = "";
+            $obj->confirmed = 1;
+            $obj->isadmin = 1;
+            $DB->insert_record("portal_users", $obj);
+
+            // Insert default settings
+            $settings = array();
+            $settings['welcome_email'] = "Welcome to the Parent Portal system!
+
+    To confirm your account please visit the following URL:
+
+    %confirm%
+
+    If you have any problems please contact your Learning Technologies team";
+
+            $settings['accessrequests_type'] = 'idnumber';
+            $settings['signup_code'] = '';
+            $settings['idnumber_field'] = 'username';
+            $settings['site_title'] = 'Parent Portal';
+
+            foreach($settings as $setting => $value)
+            {
+                $obj = new \stdClass();
+                $obj->setting = $setting;
+                $obj->value = $value;
+                $DB->insert_record("portal_settings", $obj);
+            }
+        
         }
         
         // Try and create the folder in moodle data
@@ -223,7 +237,21 @@ If you have any problems please contact your Learning Technologies team";
             mkdir($CFG->dataroot . '/parent_portal/', 0775);
         }
         
-        \set_config("parent_portal_version", $this->version, 'local_parentportal');
+        
+        // if old version installed, remove the old ELBP plugin
+        if ($oldVersion){
+            
+            require_once $CFG->dirroot . '/blocks/elbp/lib.php';
+            $ELBP = new \ELBP\ELBP();
+            $elbpPlugin = $ELBP->getPlugin('elbp_portal', true);
+            if ($elbpPlugin){
+                $elbpPlugin->uninstall();
+            }
+            
+        }
+       
+        // Set installed setting
+        set_config('installed', '1', 'local_parentportal');
         
         header('Location:' . $this->www);
         exit;
@@ -235,58 +263,8 @@ If you have any problems please contact your Learning Technologies team";
     {
      
         global $CFG, $DB;
-        $dbman = $DB->get_manager();
         
-        \pp_trace("Running update from version {$this->dbversion} to {$this->version}");
-
-        if ($this->dbversion < 2014120502)
-        {
-            
-            $table = new \xmldb_table("portal_requests");
-            $field = new \xmldb_field('requestlastupdatedby', XMLDB_TYPE_CHAR, '255');
-
-            // Conditionally launch add field castas
-            if (!$dbman->field_exists($table, $field)) {
-                $dbman->add_field($table, $field);
-            }
-            
-            \pp_trace("Added `requestlastupdatedby` column to `portal_requests` table");
-            
-        }
         
-        // Create moodledata folder
-        if ($this->dbversion < 2015093000)
-        {
-            
-            $result = false;
-            
-            // Try and create the folder in moodle data
-            if (!is_dir($CFG->dataroot . '/parent_portal/')){
-                $result = mkdir($CFG->dataroot . '/parent_portal/', 0775);
-            }
-            
-            \pp_trace("Tried to create 'parent_portal' directory within 'moodledata', result - " . (int)$result);
-            
-        }
-        
-        if ($this->dbversion < 2016101800)
-        {
-            $setting = "Welcome to the Parent Portal system!
-
-                To confirm your account please visit the following URL:
-
-                %confirm%
-
-                If you have any problems please contact your Learning Technologies team";
-            $result = $this->updateSetting('welcome_email', $setting);
-            \pp_trace('Updated welcome email setting, result - ' . (int)$result);
-        }
-        
-        // Set new version
-        \set_config('parent_portal_version', $this->version);
-        $this->dbversion = $this->version;
-        \pp_trace("Updated DB version to {$this->version}");
-        \pp_trace("<a href='".$CFG->wwwroot."/local/parentportal/'>Click here to continue</a>");
         
     }
     
