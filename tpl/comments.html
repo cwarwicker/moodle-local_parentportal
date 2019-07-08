@@ -2,9 +2,9 @@
 
 <?php if ($Portal->getStudent()): ?>
 
-    <?php if ($comments): ?>
+    <?php if (isset($comments) && $comments): ?>
 
-    <?php $cnt = count($comments); $n = 0; ?>    
+    <?php $cnt = count($comments); $n = 0; ?>
     <?php foreach($comments as $comment): ?>
 
         <?php $n++ ?>

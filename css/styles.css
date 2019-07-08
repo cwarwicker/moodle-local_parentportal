@@ -6,9 +6,15 @@ html, body
 
 body
 {
-    background: url('pix/bg.png') repeat 0 0;
+    background: url('../pix/bg.png') repeat 0 0;
     font-family: Helvetica, Arial, Sans-Serif;
     color: #555555;
+}
+
+/** Remove Moodle Elements **/
+div#page-wrapper
+{
+  display: none;
 }
 
 div#wrapper
@@ -31,9 +37,9 @@ div#area-bar
 {
     height: 40px;
     width: 100%;
-    background: url('pix/blue_grad.png') repeat-x #9f3ba5;
+    background: url('../pix/blue_grad.png') repeat-x #9f3ba5;
     color: #fff;
-    
+
 }
 
 div#area-bar ul {
@@ -75,7 +81,6 @@ div#area-bar ul li {
 
 div#link-bar
 {
-    height: 15px;
     width: 100%;
     background-color: #f8f8f8;
     padding-top: 10px;
@@ -242,7 +247,7 @@ input:hover, input:focus {
 }
 
 input.login {
-    background: url('pix/login.png') no-repeat !important;
+    background: url('../pix/login.png') no-repeat !important;
     border: none !important;
     height: 38px !important;
     width: 90px !important;
@@ -250,7 +255,7 @@ input.login {
 }
 
 input.login:hover {
-    background: url('pix/login2.png') no-repeat !important;
+    background: url('../pix/login2.png') no-repeat !important;
 }
 
 input[type="submit"], input[type="button"]
@@ -405,7 +410,7 @@ div.section-header
 }
 
 
-div#students table 
+div#students table
 {
     width: 100%;
 }
@@ -427,7 +432,7 @@ div#students-content div:first-child
 }
 
 input.request {
-    background: url('pix/request.png') no-repeat !important;
+    background: url('../pix/request.png') no-repeat !important;
     border: none !important;
     height: 36px !important;
     width: 108px !important;
@@ -435,7 +440,7 @@ input.request {
 }
 
 input.request:hover {
-    background: url('pix/request2.png') no-repeat !important;
+    background: url('../pix/request2.png') no-repeat !important;
 }
 
 div.statsBox
@@ -532,7 +537,7 @@ span.title
     font-weight: bold;
 }
 
-div#containerDivAdminUsers {    
+div#containerDivAdminUsers {
     margin: auto;
 }
 
@@ -811,7 +816,7 @@ text-align: left;
 }
 
 
-td.elbp_studentprofile_column 
+td.elbp_studentprofile_column
 {
     vertical-align: top;
 }
@@ -957,7 +962,7 @@ table#course-reports tr th
 {
     background-color: #9f3ba5;
     color: #fff;
-    
+
 }
 
 
@@ -1063,7 +1068,7 @@ input.small
 	opacity: 1;
 }
 
-.tooltipContentT, .unitInfoContent, .criteriaContent 
+.tooltipContentT, .unitInfoContent, .criteriaContent
 {
     font-size: 10pt;
 }

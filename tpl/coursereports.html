@@ -2,10 +2,10 @@
 
 <?php if ($Portal->getStudent()): ?>
 
-<?php if ($reports): ?>
+<?php if (isset($reports) && $reports): ?>
 
 <table id='course-reports'>
-    
+
     <tr><th><?= $string['name'] ?></th><th><?= $string['setby'] ?></th><th><?= $string['date'] ?></th></tr>
 
     <?php foreach($reports as $report): ?>
@@ -16,9 +16,9 @@
         <td><a href="<?= $CFG->wwwroot ?>/blocks/elbp/print.php?plugin=<?= $OBJ->getID() ?>&object=<?= $report->getID() ?>&student=<?= $report->getStudentID() ?>&type=periodical" target="_blank"><input class='button' type='button' value='<?= $string['view'] ?>' /></a></td>
     </tr>
     <?php endforeach; ?>
-    
+
 <?php else: ?>
-    
+
 <p class='c'><?= $string['nocoursereports'] ?></p>
 
 <?php endif; ?>

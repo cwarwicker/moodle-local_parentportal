@@ -1,21 +1,3 @@
-function pp_setImage(obj, img)
-{
-    $(obj).attr('src', 'pix/'+img);
-} 
-
-function pp_deleteRequest(sID){
-    
-    var confirm = window.confirm("Are you sure you want to delete/cancel this request?");
-    
-    if (confirm === true){
-        
-        window.location.href = www + '?action=deleterequest&sID='+sID;
-        return;
-        
-    }
-    
-}
-
 function pp_searchParents()
 {
     var search = $('#findParent').val();
@@ -24,7 +6,7 @@ function pp_searchParents()
     };
 
     $('#parentSearchImg').html('<img src=\"pix/loading.gif\" />');
-    $('#parentAccountSelect').html(''); 
+    $('#parentAccountSelect').html('');
 
     $.post('ajaxScripts.php', {action: 'search_parents', params: params}, function(data){
         eval(data);
@@ -101,40 +83,40 @@ function pp_confirmAccess(id, sid)
 }
 
 function pp_showHidePassword(id){
-    
+
     var type = $('#'+id).attr('type');
     if (type == 'password'){
         $('#'+id).attr('type', 'text');
     } else {
         $('#'+id).attr('type', 'password');
     }
-    
+
 }
 
 function pp_load_display(type, tab){
-    
+
     var params = { type: type, studentID: ELBP.studentID, courseID: ELBP.courseID };
-    
+
     ELBP.set_view_link(tab);
     $('#elbp_portal_content').html('<img src="'+M.cfg.wwwroot+'/blocks/elbp/pix/loader.gif" alt="" />');
-    
+
     $.post(M.cfg.wwwroot + '/local/parentportal/ajaxScripts.php', {action: 'load_display_elbp', params: params}, function(data){
         $('#elbp_portal_content').html(data);
     });
-        
+
 }
 
 function pp_update_status(id, password, status){
-    
+
     var params = { id: id, password: password, status: status, studentID: ELBP.studentID, courseID: ELBP.courseID };
-    
+
     $('#request_loading_'+id).html('<img src="'+M.cfg.wwwroot+'/blocks/elbp/pix/loader.gif" alt="" />');
-    
+
     $.post(M.cfg.wwwroot + '/local/parentportal/ajaxScripts.php', {action: 'update_status_elbp', params: params}, function(data){
         eval(data);
         $('#request_loading_'+id).html('');
     });
-    
+
 }
 
 // http://stackoverflow.com/questions/8579643/simple-jquery-scroll-to-anchor-up-or-down-the-page

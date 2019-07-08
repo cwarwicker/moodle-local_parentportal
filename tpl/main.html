@@ -1,12 +1,12 @@
 <div id='snapshot'>
-    
+
     <?php if ($Portal->getStudent()): ?>
-    
+
     <?= $StudentProfile->display( array('noBadges' => true) ) ?>
     <br><br>
-        
-    
-    <?php if ($Portal->isPluginEnabled('attendance')): ?>
+
+
+    <?php if ($Portal->isPluginEnabled('attendance') && isset($ATT)): ?>
         <div id='snapshot-attendance'>
 
             <div class='title-bar'>
@@ -23,9 +23,9 @@
 
         <br><br>
     <?php endif; ?>
-    
-    <?php if ($Portal->isPluginEnabled('coursereports') && $reports): ?>
-    
+
+    <?php if ($Portal->isPluginEnabled('coursereports') && isset($reports) && $reports): ?>
+
         <div id='snapshot-coursereports'>
 
             <div class='title-bar'>
@@ -51,12 +51,12 @@
             </div>
 
         </div>
-    
+
     <?php endif; ?>
 
-    
-    <?php if ($Portal->isPluginEnabled('comments') && $comments): ?>
-    
+
+    <?php if ($Portal->isPluginEnabled('comments') && isset($comments) && $comments): ?>
+
         <div id='snapshot-comments'>
 
             <div class='title-bar'>
@@ -86,38 +86,38 @@
             </div>
 
         </div>
-    
+
     <?php endif; ?>
-    
-    
+
+
     <?php if ($Portal->isPluginEnabled('grades') && isset($quals) && $quals): ?>
-            
+
     <div id='snapshot-gradetracker'>
-        
+
         <div class='title-bar'>
             <?= $string['gradetrackersnapshot'] ?>
         </div>
-        
+
         <div class='section'>
-            
+
             <table class='snapshot-qual'>
 
                 <?php if (isset($quals['block'])): ?>
-                
+
                     <tr>
                         <th><?= get_string('qualification', 'block_gradetracker') ?></th>
                     </tr>
-                    
+
                     <?php foreach($quals['quals'] as $qual): ?>
-                    
+
                         <tr>
                             <td><a href="<?= $CFG->wwwroot ?>/local/parentportal/?page=grades&studentid=<?= $quals['student']->id ?>&qualID=<?= $qual->getID() ?>"><?= $qual->getShortDisplayName() ?></a></td>
                         </tr>
-                    
+
                     <?php endforeach; ?>
-                
+
                 <?php else: ?>
-                
+
                     <tr>
                         <th><?= get_string('qualification', 'block_bcgt') ?></th>
                         <th><?= get_string('predictedgrade', 'block_bcgt') ?></th>
@@ -133,24 +133,24 @@
                         </tr>
 
                     <?php endforeach; ?>
-                
+
                 <?php endif; ?>
 
             </table>
-            
+
         </div>
-        
+
     </div>
-    
+
     <?php endif; ?>
-    
-    
+
+
     <br class='cl' /><br>
-    
+
     <?php else: ?>
-    
+
     <p class='c'><?= $string['pleaseselectstudent'] ?></p>
-    
+
     <?php endif; ?>
-    
+
 </div>
