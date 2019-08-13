@@ -17,7 +17,7 @@ define(['jquery', 'jqueryui', 'block_elbp/scripts', 'block_gradetracker/grids'],
 
 
     // Clone the PP content, Remove all moodle content, then insert PP content back in
-    let content = $('#wrapper').clone();
+    var content = $('#wrapper').clone();
     $('body > div').remove();
     $('#page-footer').remove();
     $('body').append(content);

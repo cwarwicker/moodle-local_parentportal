@@ -15,29 +15,29 @@ $params = (object) $params;
 
 switch($action)
 {
-    
-    
+
+
     case 'load_display_elbp':
-        
+
         require_once $CFG->dirroot . '/blocks/elbp/lib.php';
         $ELBP = \ELBP\ELBP::instantiate();
-        $elbp_portal = $ELBP->getPlugin("elbp_portal");
+        $elbp_portal = $ELBP->getPlugin("elbp_parentportal");
         $elbp_portal->ajax("load_display_type", (array)$params, $ELBP);
         exit;
-        
+
     break;
 
     case 'update_status_elbp':
-        
+
         require_once $CFG->dirroot . '/blocks/elbp/lib.php';
         $ELBP = \ELBP\ELBP::instantiate();
-        $elbp_portal = $ELBP->getPlugin("elbp_portal");
+        $elbp_portal = $ELBP->getPlugin("elbp_parentportal");
         $elbp_portal->ajax("update_request_status", (array)$params, $ELBP);
         exit;
-        
+
     break;
 
-    
+
     // Use the AJAX search for parent accounts
     case 'search_parents':
 
@@ -48,7 +48,7 @@ switch($action)
         {
 
             $results = $portal->searchParents($params->search);
-            
+
             // If there are results build options for them
             if($results)
             {
@@ -60,22 +60,22 @@ switch($action)
                     echo " $('#parentAccountSelect').append('<option value=\"{$result->id}\">{$fname} {$lname} ({$email})</option>'); ";
                 }
             }
-                        
+
         }
-        
+
     break;
-    
+
     // use the AJAX student search - this will only find students with links to parents
     case 'search_students':
-        
+
         // Stop if we're not admin
         if(!$portal->isAdmin()) exit;
 
         if(isset($params->search))
         {
-            
+
             $results = $portal->searchStudents($params->search);
-            
+
             // If there are results build options for them
             if($results)
             {
@@ -85,35 +85,35 @@ switch($action)
                     echo " $('#studentAccountSelect').append('<option value=\"{$result->id}\">{$name} ({$result->username})</option>'); ";
                 }
             }
-            
+
             if ( count($results) > 100 )
             {
                 echo " $('#studentAccountSelect').append('<option value=\"\">{$string['toomany']}</option>'); ";
             }
-            
+
         }
-        
+
     break;
-    
+
     // Load the info for a parent, such as their details, their links to students, etc...
     case 'load_parent':
-        
+
         // Stop if we're not admin
         if(!$portal->isAdmin()) exit;
-        
+
         $field = $portal->getIDField();
 
         if(isset($params->id))
         {
-            
+
             $result = $portal->searchParent($params->id);
-            
+
             if($result)
             {
-                
+
                 // If parent's account is not confirmed display a link to confirm it for them
                 $result->isConfirmed = ($result->confirmed) ? 'Yes' : '<small><a href=\'#\' onclick=\'pp_confirmParentAccount('.$result->id.');return false;\'>[Confirm Account]</a></small>';
-                
+
                 $output = "";
                 $output .= "<table class='accountInfo'>";
                     $output .= "<tr><td colspan='2' class='c'><a href='{$portal->www}?page=user&user={$result->id}'><img src='".$OUTPUT->image_url('t/editstring', 'core')."' alt='edit' /></a><br><br></td></tr>";
@@ -121,10 +121,10 @@ switch($action)
                     $output .= "<tr><td>{$string['name']}</td><td>{$result->firstname} {$result->lastname}</td></tr>";
                     $output .= "<tr><td>{$string['email']}</td><td>{$result->email}</td></tr>";
                 $output .= "</table>";
-                $output .= "<br>";    
+                $output .= "<br>";
                 $output .= "<p class='c'><b>{$string['currentrequests']}:</b></p>";
                 $output .= "<br>";
-                    
+
                 if(isset($result->links))
                 {
                     $output .= "<table class='accountInfo' id='requestHistory'>";
@@ -139,7 +139,7 @@ switch($action)
 
                     $output .= "</table>";
                 }
-                    
+
                 echo <<<JS
                 $('#accountOutput').html("{$output}");
 JS;
@@ -148,39 +148,39 @@ JS;
             {
                 echo " $('#accountOutput').html('<em>Unable to load parent</em>'); ";
             }
-            
+
         }
-        
+
     break;
-    
+
     // Load a student's info, such as details, parent links, etc...
     case 'load_student':
-        
+
         // Stop if we're not admin
         if(!$portal->isAdmin()) exit;
-        
+
         $field = $portal->getIDField();
 
         if(isset($params->id))
         {
-            
+
             $result = $portal->searchStudent($params->id);
-            
+
             if($result)
             {
-                
+
                 $output = "";
                 $output .= "<table class='accountInfo'>";
-                
+
                     $output .= "<tr><td>ID</td><td>{$result->$field}</td></tr>";
                     $output .= "<tr><td>Name</td><td>{$result->firstname} {$result->lastname}</td></tr>";
                     $output .= "<tr><td>Email</td><td>{$result->email}</td></tr>";
 
                 $output .= "</table>";
-                $output .= "<br>";    
+                $output .= "<br>";
                 $output .= "<p class='c'><b>{$string['currentrequests']}:</b></p>";
                 $output .= "<br>";
-                
+
                 if(isset($result->links))
                 {
                     $output .= "<table class='accountInfo' id='requestHistory'>";
@@ -199,63 +199,63 @@ JS;
 
                     $output .= "</table>";
                 }
-                    
+
                 echo <<<JS
                 $('#accountOutput').html("{$output}");
 JS;
-                
+
             }
             else
             {
                 echo " $('#accountOutput').html('<em>Unable to load student</em>'); ";
             }
-        
+
         }
-        
+
     break;
-    
-    
-       
-    
-    
+
+
+
+
+
     // Cancel the access a parent has to a particular student
     case 'cancel_access':
-        
+
         // Stop if not admin
         if(!$portal->isAdmin()) exit;
 
         // Check if parent has access
-        $check = $DB->get_record("portal_requests", array("portaluserid" => $params->id, "userid" => $params->sid)); 
+        $check = $DB->get_record("portal_requests", array("portaluserid" => $params->id, "userid" => $params->sid));
         if(!$check) exit;
-        
+
         $check->status = PP_STATUS_CANCELLED;
         $DB->update_record("portal_requests", $check);
-        
+
         $portal->logHistory('portal', $portal->getUserID(), $params->id, $params->sid, PP_STATUS_CANCELLED);
-                
+
         echo " $('#P{$params->id}S{$params->sid}_STATUS').text('Cancelled'); $('#P{$params->id}S{$params->sid}_ROW').attr('class', 'cancelled'); $('#P{$params->id}S{$params->sid}_REMOVE').remove(); ";
-        
+
     break;
-    
-    
+
+
     // Cancel the access a parent has to a particular student
     case 'confirm_access':
-        
+
         // Stop if not admin
         if(!$portal->isAdmin()) exit;
 
         // Check if parent has access
-        $check = $DB->get_record("portal_requests", array("portaluserid" => $params->id, "userid" => $params->sid)); 
+        $check = $DB->get_record("portal_requests", array("portaluserid" => $params->id, "userid" => $params->sid));
         if(!$check) exit;
-        
+
         $check->status = PP_STATUS_CONFIRMED;
         $DB->update_record("portal_requests", $check);
-        
+
         $portal->logHistory('portal', $portal->getUserID(), $params->id, $params->sid, PP_STATUS_CONFIRMED);
-                
+
         echo " $('#P{$params->id}S{$params->sid}_STATUS').text('Confirmed'); $('#P{$params->id}S{$params->sid}_ROW').attr('class', 'confirmed'); $('.P{$params->id}S{$params->sid}_REMOVE').remove(); ";
-        
+
     break;
-    
-    
+
+
 }

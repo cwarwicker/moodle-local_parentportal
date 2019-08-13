@@ -243,7 +243,7 @@ class Portal {
 
             require_once $CFG->dirroot . '/blocks/elbp/lib.php';
             $ELBP = new \ELBP\ELBP();
-            $elbpPlugin = $ELBP->getPlugin('elbp_portal', true);
+            $elbpPlugin = $ELBP->getPlugin('elbp_parentportal', true);
             if ($elbpPlugin){
                 $elbpPlugin->uninstall();
             }
