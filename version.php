@@ -14,18 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Version details.
- *
- * @package    local
- * @subpackage adminer
- * @copyright  2011 Andreas Grabs
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->version  = 2018061400;
 $plugin->requires = 2016052300;
 $plugin->maturity = MATURITY_BETA;
 $plugin->component = 'local_parentportal';
+$plugin->dependencies = array(
+    'block_elbp' => 2018072501
+);
