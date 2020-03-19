@@ -8,7 +8,7 @@ define(['jquery', 'jqueryui', 'block_elbp/scripts', 'block_gradetracker/grids'],
     // Bind elements
     config.bindings(data);
 
-  }
+  };
 
   config.bindings = function(data){
 
@@ -36,7 +36,7 @@ define(['jquery', 'jqueryui', 'block_elbp/scripts', 'block_gradetracker/grids'],
 
     // Change images on hover
     $('.pp_change_image').off('mouseover');
-    $('.pp_change_image').on('mouseover', function(e){
+    $('.pp_change_image').on('mouseover', function(){
 
       var img = $(this).attr('on');
       $(this).attr('src', 'pix/'+img);
@@ -44,7 +44,7 @@ define(['jquery', 'jqueryui', 'block_elbp/scripts', 'block_gradetracker/grids'],
     });
 
     $('.pp_change_image').off('mouseout');
-    $('.pp_change_image').on('mouseout', function(e){
+    $('.pp_change_image').on('mouseout', function(){
 
       var img = $(this).attr('off');
       $(this).attr('src', 'pix/'+img);
@@ -77,29 +77,11 @@ define(['jquery', 'jqueryui', 'block_elbp/scripts', 'block_gradetracker/grids'],
 
     // Screw the rest of it, if i'm going to do a new PP anyway, just leave it in old functions. It works.
 
-
-
-
-    $('.class').off('click');
-    $('.class').on('click', function(e){
-
-
-
-      e.preventDefault();
-
-    });
-
-  }
-
+  };
 
 
 
   var client = {};
-
-  //-- Log something to console
-  client.log = function(log){
-      console.log('[PP] ' + new Date().toTimeString().split(' ')[0] + ': ' + log );
-  }
 
   //-- Initialise the scripts
   client.init = function(data) {
@@ -107,9 +89,7 @@ define(['jquery', 'jqueryui', 'block_elbp/scripts', 'block_gradetracker/grids'],
     // Bindings
     config.init(data);
 
-    client.log('Loaded scripts.js');
-
-  }
+  };
 
   // Return client object
   return client;

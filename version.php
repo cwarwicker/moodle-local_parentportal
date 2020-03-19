@@ -16,10 +16,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2018061400;
-$plugin->requires = 2016052300;
+$plugin->version  = 2020031900;
+$plugin->requires = 2017111300;
 $plugin->maturity = MATURITY_BETA;
 $plugin->component = 'local_parentportal';
 $plugin->dependencies = array(
-    'block_elbp' => 2018072501
+    'block_elbp' => 2020031900
 );
